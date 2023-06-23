@@ -108,6 +108,7 @@ function processInput(e) {
     if (!gameOver && row == height) {
         gameOver = true;
         document.getElementById("answer").innerText = word;
+        showModal("You Lost");
     }
 }
 
@@ -166,6 +167,7 @@ function update() {
 
         if (correct == width) {
             gameOver = true;
+            showModal("You Won");
         }
     }
 
@@ -199,4 +201,31 @@ function update() {
 
     row += 1; //start a new row
     col = 0; //start at 0 for new attempt(row)
+}
+
+
+//Show the Modal
+function showModal(result) {
+    let modal = document.getElementsByClassName("Modal");
+    let modalText = document.getElementsByClassName("text");
+    let ans_banner = document.getElementsByClassName("ans_banner");
+    let button = document.getElementsByClassName("button");
+    let close = document.getElementsByClassName("close");
+
+    if(result == "You Lost") {result += "😞";}
+    else {result += "😊";}
+    modalText[0].innerText = result;
+    ans_banner[0].innerText = "Answer: " + word;
+    modal[0].classList.toggle("show");
+    button[0].addEventListener("click", (event) => {
+        location.reload();
+    })
+    window.onclick = function(event) {
+        if (event.target == modal[0]) {
+            location.reload();
+        }
+    }
+    close[0].addEventListener("click", (event) => {
+        modal[0].classList.toggle("show");
+    })
 }

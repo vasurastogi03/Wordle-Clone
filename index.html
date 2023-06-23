@@ -6,11 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="wordle.css">
-    <script src="wordle.js"></script>
 
     <title>Wordle</title>
 </head>
 <body>
+
+    <section class="Modal">
+        <!-- Our Modal Content -->
+        <article class="modal-content">
+            <button class="close">&times;</button>
+            <h2 class="text"></h2>
+            <p class="ans_banner"></p>
+            <button class="button">Play Again?</button>
+        </article>
+    </section>
+
     <h1 id="title">Wordle</h1>
     <hr>
     <br>
@@ -18,5 +28,7 @@
     </div>
     <br>
     <h1 id="answer"></h1>
+
+    <script src="wordle.js"></script>
 </body>
 </html>
