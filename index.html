@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- "maximum-scale=1.0, user-scalable=no" This is done to stop the zooming in of the page when opened on mobile devices -->
     <link rel="stylesheet" href="wordle.css">
 
     <title>Wordle</title>
@@ -21,13 +21,15 @@
         </article>
     </section>
 
-    <h1 id="title">Wordle</h1>
-    <hr>
-    <br>
-    <div id="board">
-    </div>
-    <br>
-    <h1 id="answer"></h1>
+    <section class="wordle-board">
+        <h1 id="title">Wordle</h1>
+        <hr>
+        <br>
+        <div id="board">
+        </div>
+        <br>
+        <h1 id="answer"></h1>
+    </section>
 
     <script src="wordle.js"></script>
 </body>

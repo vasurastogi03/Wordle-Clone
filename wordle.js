@@ -12,6 +12,7 @@ let word = wordList[Math.floor(Math.random()*wordList.length)].toUpperCase();
 // let word = "slyly".toUpperCase(); /*these are some testing examples- (slyly, fella, slays),(dopey, trees, eerie)*/
 console.log(word);
 
+//this loads up the wordle board
 window.onload = function() {
     initialize();
 }
@@ -41,7 +42,10 @@ function initialize() {
         let currRow = keyboard[i];
         let keyboardRow = document.createElement("div");
         keyboardRow.classList.add("keyboard-row");
-
+        keyboardRow.classList.add("wordle-board");//this is done to contain it inside wordle-board's
+                            //large section so that it helps in blurring effect after Modal pops up. 
+        
+        //assigning IDs to each keyTile 
         for (let j = 0; j < currRow.length; j++) {
             let keyTile = document.createElement("div");
 
@@ -57,7 +61,8 @@ function initialize() {
                 keyTile.id = "Key" + key; // "Key" + "A";
             } 
 
-            keyTile.addEventListener("click", processKey);
+            keyTile.addEventListener("click", processKey);//Listen for key press form
+                                                          //on-screen keyboard
 
             if (key == "Enter") {
                 keyTile.classList.add("enter-key-tile");
@@ -71,13 +76,52 @@ function initialize() {
 
     //Listen for Key press
     document.addEventListener("keyup", (e) => {
+        //This part raises the keys on pressing keys from the keyboard when user uses their own keyboard
+        if (("KeyA" <= e.code && e.code <= "KeyZ") || (e.code == "Backspace" || e.code == "Enter")) {
+            raiseKey(e.code);
+        }
+        
         processInput(e);
     })
 }
 
-function processKey() {
+async function processKey() {
+    raiseKey(this.id) // This part raises the keys on pressing in the on-screen keyboard only
+  
     e = { "code" : this.id };
     processInput(e);
+}
+
+//function to raise a key on the on-screen keyboard
+async function raiseKey(keyId) {
+    let key = document.getElementById(keyId);
+    key.classList.add("raise-key");
+    let keyString = keyId.replace('Key', '');
+    if (keyString == "Backspace") { keyString = "⌫"; }
+    let keyboard = [
+        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+        ["A", "S", "D", "F", "G", "H", "J", "K", "L", " "],
+        ["Enter", "Z", "X", "C", "V", "B", "N", "M", "⌫" ]
+    ]
+    let j;
+
+    for(let r=0; r<3; r++) {
+        for(let c=0; c<keyboard[r].length; c++) {
+            if (keyboard[r][c] == keyString) {
+                j = c;
+                break;
+            }
+        }
+    }
+    let raisedKey = document.getElementsByClassName('raise-key');
+    if(window.innerWidth <= 576) {
+        raisedKey[0].style.left = 37*j+'px';  //For Mobile level devices
+    }
+    else {
+        raisedKey[0].style.left = 42*j+'px'; //For all the remaining screen sizes
+    }
+    await new Promise(r => setTimeout(r, 150));
+    key.classList.remove("raise-key");
 }
 
 function processInput(e) {
@@ -211,11 +255,15 @@ function showModal(result) {
     let ans_banner = document.getElementsByClassName("ans_banner");
     let button = document.getElementsByClassName("button");
     let close = document.getElementsByClassName("close");
+    let wordleBoard = document.getElementsByClassName("wordle-board");
 
     if(result == "You Lost") {result += "😞";}
     else {result += "😊";}
     modalText[0].innerText = result;
     ans_banner[0].innerText = "Answer: " + word;
+    for (let i = 0; i < 4; i++) {
+        wordleBoard[i].classList.toggle("is-blurred");  //This produces blur effect
+    }
     modal[0].classList.toggle("show");
     button[0].addEventListener("click", (event) => {
         location.reload();
@@ -226,6 +274,9 @@ function showModal(result) {
         }
     }
     close[0].addEventListener("click", (event) => {
+        for (let i = 0; i < 4; i++) {
+            wordleBoard[i].classList.toggle("is-blurred"); //This removes blur effect
+        }
         modal[0].classList.toggle("show");
     })
 }
